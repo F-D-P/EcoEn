@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoEn</title>
+    <link rel="icon" type="image/png" href="{% static 'images/faviconTT.png' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+</head>
+<script>
+    (() => {
+    'use strict';
+    const form = document.getElementById('formContacto');
+    const btnTexto = document.getElementById('btnTexto');
+    const spinner = document.getElementById('spinner');
+
+    form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+        form.classList.add('was-validated');
+        } else {
+        btnTexto.textContent = 'Enviando';
+        spinner.classList.remove('d-none');
+        }
+    }, false);
+    })();
+</script>
+
+<body>
+    <header class="text-white text-center p-4 bg-azul">
+    <h1>"🌱 Energia Renovable" </h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-azul">
+        <div class="container-fluid">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
+            <li class="nav-item"><a class="nav-link" href="#reseñas">Reseñas</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+        </ul>
+        </div>
+    </nav>
+    </header>
+
+<main>
+    <section id="inicio" class="text-center p-5 text-white bg-solar">
+        <h2>Impulsa el futuro con energía limpia</h2>
+        <p>Descubre soluciones solares, eólicas y más para un mundo sostenible.</p>
+        <div class="container" style="max-width: 700px;">
+        <div class="ratio ratio-16x9">
+            <iframe src="https://www.youtube.com/embed/1kUE0BZtTRc" title="Energía renovable" allowfullscreen></iframe>
+        </div>
+        </div>
+    </section>
+
+    <section id="productos" class="container py-5">
+        <h2 class="text-center mb-4">🌞 Nuestros Productos</h2>
+        <div class="row g-4">
+
+        
+        <div class="col-md-4">
+            <div class="card h-100 zoom-card">
+            <div class="slider">
+                <div class="slides">
+                <img src="{% static 'images/panel-solar2.jpg' %}" alt="Panel solar 3" class="slide active">
+                <img src="{% static 'images/panel-solar4.jpg' %}" alt="Panel solar 5" class="slide">
+                <img src="{% static 'images/panel-solar5.jpg' %}" alt="Panel solar 6" class="slide">
+
+            </div>
+            <div class="controls">
+                <button id="prev">⟨</button>
+                <button id="next">⟩</button>
+            </div>
+            <div class="dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Paneles Solares</h5>
+                <p class="card-text">Alta eficiencia para hogares y empresas.</p>
+            </div>
+        </div>
+    </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 zoom-card">
+            <div class="slider">
+                <div class="slides">
+                <img src="{% static 'images/turbina-real.jpg' %}" alt="Turbina 1" class="slide active">
+                <img src="{% static 'images/turbina-real2.jpg' %}" alt="Turbina 2" class="slide">
+                <img src="{% static 'images/turbina-real3.jpg' %}" alt="Turbina 3" class="slide">
+
+            </div>
+            <div class="controls">
+                <button id="prev">⟨</button>
+                <button id="next">⟩</button>
+            </div>
+            <div class="dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+            <div class="card-body">
+                <h5 class="card-title">Turbinas Eólicas</h5>
+                <p class="card-text">Genera energía limpia con el viento.</p>
+            </div>
+        </div>
+    </div>
+
+        
+        <div class="col-md-4">
+            <div class="card h-100 zoom-card">
+            <div class="slider">
+            <div class="slides">
+                <img src="{% static 'images/bateria.jpg' %}" alt="Batería 1" />
+                <img src="{% static 'images/bateria2.jpg' %}" alt="Batería 2" />
+                <img src="{% static 'images/bateria3.jpg' %}" alt="Batería 3" />
+            </div>
+            <div class="controls">
+                <button id="prev">⟨</button>
+                <button id="next">⟩</button>
+            </div>
+            <div class="dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+            <div class="card-body">
+                <h5 class="card-title">Baterías de Almacenamiento</h5>
+                <p class="card-text">Guarda energía para cuando más la necesitas.</p>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    </section>
+
+    <section id="reseñas" class="py-5 bg-claro">
+        <h2 class="opiniones-titulo text-center mb-4">💬 Opiniones de Clientes</h2>
+        <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="p-3 bg-white shadow-sm rounded">"Los paneles solares redujeron mi factura un 70%." – Ana G.</div>
+        </div>
+        <div class="col">
+            <div class="p-3 bg-white shadow-sm rounded">"La turbina eólica funciona incluso en días nublados." – Carlos M.</div>
+        </div>
+        <div class="col">
+            <div class="p-3 bg-white shadow-sm rounded">"Excelente atención y productos de calidad." – Lucía R.</div>
+        </div>
+    </div>
+</div>
+    {% for op in opiniones %}
+        <div class="col">
+        <div class="p-3 bg-white shadow-sm rounded">
+            "{{ op.mensaje }}" – {{ op.nombre }}
+        </div>
+</div>
+{% empty %}
+    <p class="text-center">Aún no hay opiniones cargadas.</p>
+{% endfor %}
+    </section>
+
+    <section id="contacto" class="py-5 bg-claro">
+        <h2 class="text-center mb-4 text-azul">📬 Contáctanos</h2>
+        <div class="container">
+    <form action="https://formspree.io/f/xjkankyn" method="POST" class="fs-form fs-layout__2-column needs-validation" novalidate id="formContacto">
+<fieldset>
+    <legend class="fs-fieldset-title animate__animated animate__fadeInDown">Envíanos tu mensaje</legend>
+
+    <!-- Nombre -->
+    <div class="fs-field animate__animated animate__fadeInLeft">
+        <label for="nombre" class="fs-label">Nombre</label>
+        <input type="text" class="form-control fs-input" id="nombre" name="nombre" required>
+        <div class="invalid-feedback">Por favor, ingresá tu nombre.</div>
+    </div>
+
+    <!-- Email -->
+    <div class="fs-field animate__animated animate__fadeInRight">
+        <label for="email" class="fs-label">Correo electrónico</label>
+        <input type="email" class="form-control fs-input" id="email" name="email" required>
+        <div class="invalid-feedback">Por favor, ingresá un correo válido.</div>
+    </div>
+
+    <!-- Mensaje -->
+    <div class="fs-field col-span-full animate__animated animate__fadeInUp">
+        <label for="mensaje" class="fs-label">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" class="form-control fs-textarea" rows="4" required></textarea>
+        <div class="invalid-feedback">Por favor, escribí tu mensaje.</div>
+    </div>
+
+    <!-- Spinner y botón -->
+    <div class="fs-button-group">
+        <button type="submit" class="fs-button d-flex align-items-center" id="btnEnviar">
+        <span id="btnTexto">Enviar</span>
+        <span id="spinner" class="dots-spinner ms-3 d-none" aria-hidden="true">
+        <span>.</span><span>.</span><span>.</span>
+        </span>
+        </button>
+    </div>
+</fieldset>
+
+<!-- Redirección -->
+<input type="hidden" name="_redirect" value="gracias.html">
+</form>
+
+    </section>
+</main>
+
+<footer class="text-white text-center p-3 bg-footer">
+    <p>&copy; 2025 Energía Renovable. Todos los derechos reservados.</p>
+</footer>
+
+<script src="{% static 'js/script.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+</body>
+</html>
