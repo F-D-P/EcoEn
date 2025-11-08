@@ -1,5 +1,6 @@
 # Ignorar archivos sensibles y temporales
 .env
+env
 __pycache__/
 *.py[cod]
 *.sqlite3

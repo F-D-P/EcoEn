@@ -1,0 +1,150 @@
+/* === Reset básico === */
+body {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* === Modo claro (paleta ecológica luminosa) === */
+body.light-mode {
+  background-color: #f0fff4 !important; /* verde muy claro */
+  color: #0d2b0d !important; /* verde oscuro para texto */
+}
+
+/* === Modo oscuro (paleta ecológica sobria) === */
+body.dark-mode {
+  background-color: #0f1c0f !important; /* verde muy oscuro */
+  color: #e0f2e9 !important; /* verde claro para texto */
+}
+
+/* Header */
+body.light-mode header {
+  background-color: #2196f3 !important; /* azul cielo */
+  color: #ffffff !important;
+}
+
+body.dark-mode header {
+  background-color: #0b3d0b !important; /* verde bosque */
+  color: #e0f2e9 !important;
+}
+
+/* Navbar */
+body.light-mode nav {
+  background-color: #2196f3 !important; /* azul cielo */
+}
+
+body.dark-mode nav {
+  background-color: #0b3d0b !important; /* verde bosque */
+}
+
+body.light-mode .navbar .nav-link {
+  color: #0d2b0d !important; /* verde oscuro */
+}
+
+body.dark-mode .navbar .nav-link {
+  color: #e0f2e9 !important; /* verde claro */
+}
+
+/* Hero */
+.bg-solar {
+  background: linear-gradient(135deg, #fff176, #ffb74d) !important; /* amarillo solar + naranja suave */
+}
+
+body.dark-mode .bg-solar {
+  background: linear-gradient(135deg, #1b5e20, #0f3d0f) !important; /* verdes oscuros */
+}
+
+/* Footer */
+body.light-mode .bg-footer {
+  background-color: #2196f3 !important; /* azul cielo */
+  color: #ffffff !important;
+}
+
+body.dark-mode .bg-footer {
+  background-color: #0b3d0b !important;
+  color: #e0f2e9 !important;
+}
+
+/* Botón verde personalizado */
+.btn-verde {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+}
+
+.btn-verde:hover {
+  background-color: #388e3c;
+}
+
+/* Opiniones título */
+.opiniones-titulo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2e7d32;
+  animation: colorChangeLight 5s infinite alternate;
+}
+
+@keyframes colorChangeLight {
+  from { color: #2e7d32; }
+  to { color: #fbc02d; }
+}
+
+body.dark-mode .opiniones-titulo {
+  animation: colorChangeDark 5s infinite alternate;
+}
+
+@keyframes colorChangeDark {
+  from { color: #cddc39; }
+  to { color: #4caf50; }
+}
+
+/* Tarjetas de opiniones */
+.opinion-card {
+  background-color: #ffffff !important;
+  color: #0d2b0d !important;
+  border-radius: 8px;
+  border: 1px solid #a5d6a7;
+}
+
+body.dark-mode .opinion-card {
+  background-color: #1e2d1e !important;
+  color: #e0f2e9 !important;
+  border: 1px solid #4caf50;
+}
+
+/* Sección reseñas */
+body.light-mode .bg-claro {
+  background-color: #f0fff4 !important;
+  color: #0d2b0d !important;
+}
+
+body.dark-mode .bg-claro {
+  background-color: #1e2d1e !important;
+  color: #e0f2e9 !important;
+}
+
+/* Cards de productos */
+.zoom-card {
+  transition: transform 0.3s ease;
+}
+
+.zoom-card:hover {
+  transform: scale(1.05);
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 0.95rem;
+}
+
+/* Ajustes generales */
+h1, h2, h5 {
+  margin: 0;
+}
+
+p {
+  margin: 0.5rem 0;
+}
