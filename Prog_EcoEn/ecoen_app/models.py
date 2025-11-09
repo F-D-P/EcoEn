@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class Opinion(models.Model):
     nombre = models.CharField(max_length=100)
@@ -7,3 +9,22 @@ class Opinion(models.Model):
 
     def __str__(self):
         return f"{self.nombre}: {self.mensaje[:30]}..."
+
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    es_cliente = models.BooleanField(default=True)
+    es_vendedor = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username} ({'Cliente' if self.es_cliente else 'Vendedor'})"
+
+class Producto(models.Model):
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    imagen = models.ImageField(upload_to="productos/")
+    vendedor = models.ForeignKey(User, on_delete=models.CASCADE)
+
+def __str__(self):
+    return self.nombre
+

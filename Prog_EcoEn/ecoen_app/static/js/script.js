@@ -28,20 +28,18 @@ document.querySelectorAll(".slider").forEach((slider) => {
     dot.addEventListener("click", () => showSlide(i));
   });
 
-  // Autoplay cada 5 segundos
   setInterval(() => {
     showSlide((current + 1) % slides.length);
   }, 5000);
 });
 
-// === TOGGLE MODO OSCURO/CLARO ===
+// === MODO OSCURO/CLARO ===
 document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("themeToggle");
   const body = document.body;
 
-  if (!toggleBtn) return; // seguridad: si no existe el botón, no hace nada
+  if (!toggleBtn) return;
 
-  // Cargar preferencia guardada
   if (localStorage.getItem("theme") === "dark") {
     body.classList.add("dark-mode");
     body.classList.remove("light-mode");
@@ -52,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleBtn.textContent = "🌙 Modo oscuro";
   }
 
-  // Evento click
   toggleBtn.addEventListener("click", () => {
     body.classList.toggle("dark-mode");
     body.classList.toggle("light-mode");
@@ -66,3 +63,70 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+// === CARRITO DE COMPRAS ===
+document.addEventListener("DOMContentLoaded", () => {
+  const carritoLista = document.getElementById("carrito-lista");
+  const carritoTotal = document.getElementById("carrito-total");
+  const monedaSelect = document.getElementById("moneda");
+
+  let carrito = [];
+  let tasaCambio = {
+    USD: 1,
+    EUR: 0.92,
+    ARS: 880,
+  };
+
+  function actualizarCarrito() {
+    carritoLista.innerHTML = "";
+    let totalUSD = 0;
+
+    carrito.forEach((item, index) => {
+      totalUSD += item.precio;
+
+      const li = document.createElement("li");
+      li.className =
+        "list-group-item d-flex justify-content-between align-items-center";
+      li.innerHTML = `
+        <span>${item.nombre}</span>
+        <span>$${item.precio}</span>
+        <button onclick="eliminarDelCarrito(${index})" class="btn btn-sm btn-danger">🗑️</button>
+      `;
+      carritoLista.appendChild(li);
+    });
+
+    const moneda = monedaSelect.value;
+    const totalConvertido = totalUSD * tasaCambio[moneda];
+    carritoTotal.textContent = totalConvertido.toFixed(2) + " " + moneda;
+  }
+
+  window.eliminarDelCarrito = function (index) {
+    carrito.splice(index, 1);
+    actualizarCarrito();
+  };
+
+  document.querySelectorAll(".add-to-cart").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const nombre = btn.getAttribute("data-product");
+      const precio = parseFloat(btn.getAttribute("data-price"));
+      carrito.push({ nombre, precio });
+      actualizarCarrito();
+    });
+  });
+
+  monedaSelect?.addEventListener("change", actualizarCarrito);
+});
+
+// === MENÚ LATERAL ===
+function toggleMenu() {
+  const menu = document.getElementById("menu-lateral");
+  const icon = document.getElementById("menu-icon");
+
+  menu.classList.toggle("active");
+
+  if (menu.classList.contains("active")) {
+    icon.textContent = "✖";
+  } else {
+    icon.textContent = icon.dataset.default || "☰";
+  }
+}
