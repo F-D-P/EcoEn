@@ -326,21 +326,45 @@
 
     {% if user.is_authenticated %}
         <p>👋 Hola, {{ user.username }}</p>
-        <a href="{% url 'logout' %}" class="btn btn-danger w-100">Cerrar sesión</a>
+        <a href="{% url 'logout' %}" class="btn btn-danger w-100 mt-3">Cerrar sesión</a>
     {% else %}
-    <button onclick="toggleLoginOptions()" class="btn btn-primary w-100 mb-3">🔐 Iniciar sesión</button>
-        <div id="login-options" style="display: none;">
-            <a href="{% provider_login_url 'google' %}">Iniciar sesión con Google</a>
-            <a href="{% url 'registro' %}" class="btn btn-outline-success w-100">Registrarse</a>
+        <button onclick="toggleLoginOptions()" class="btn btn-primary w-100 mb-3">🔐 Iniciar sesión</button>
+        <div id="login-options" style="display: none; margin-top: 10px;">
+            <a href="{% url 'login' %}" class="btn btn-outline-primary w-100 mb-2">Iniciar sesión con usuario</a>
+            <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger w-100 mb-2">Iniciar sesión con Google</a>
+            <p class="text-center mt-3">¿No tienes una cuenta? 
+                <a href="{% url 'registro' %}" class="text-success">Regístrate aquí</a>
+            </p>
         </div>
     {% endif %}
 
     <button onclick="toggleConfig()" class="btn btn-secondary w-100 mt-4">⚙️ Configuración</button>
     <div id="config-options" style="display: none;" class="mt-2">
-        <button onclick="toggleDarkMode()" class="btn btn-dark w-100">🌙 Modo oscuro/claro</button>
+        <button onclick="toggleDarkMode()" class="btn btn-dark w-100">🌙 Modo oscuro / claro</button>
     </div>
 </div>
 
+<!-- Scripts para el menú -->
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('menu-lateral');
+        menu.classList.toggle('active');
+    }
+
+    function toggleLoginOptions() {
+        const options = document.getElementById('login-options');
+        options.style.display = options.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleConfig() {
+        const config = document.getElementById('config-options');
+        config.style.display = config.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+    }
+</script>
 
     <!-- ✅ SCRIPT FUNCIONAL DEL CARRITO (en pesos argentinos) -->
     <script>
