@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from .models import Perfil
 from .forms import EditarPerfilForm
 from django.contrib import messages
+from allauth.account.views import LoginView, SignupView
 
 
 def index(request):
@@ -167,3 +168,9 @@ def editar_perfil(request):
         form = EditarPerfilForm(instance=perfil, user=request.user)
 
     return render(request, "editar_perfil.html", {"form": form})
+
+class CustomLoginView(LoginView):
+    template_name = "account/login.html"
+
+class CustomSignupView(SignupView):
+    template_name = "account/signup.html"
