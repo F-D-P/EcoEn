@@ -43,11 +43,25 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     # tus apps
     "Prog_EcoEn.ecoen_app",
+    "chatbot",]
+# ID del sitio (necesario para django.contrib.sites)
+SITE_ID = 1
+
+# Configuración de autenticación
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # backend por defecto
+    'allauth.account.auth_backends.AuthenticationBackend',  # backend de allauth
 ]
 
+# Configuración de allauth
+LOGIN_REDIRECT_URL = '/'        # adonde redirige después de login
+LOGOUT_REDIRECT_URL = '/'       # adonde redirige después de logout
+ACCOUNT_EMAIL_VERIFICATION = "none"  # puedes poner "mandatory" si quieres verificar emails
+ACCOUNT_EMAIL_REQUIRED = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -62,10 +76,11 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [],  # aquí podrías poner rutas globales si quieres
+        'APP_DIRS': True,  # <— importante
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -73,6 +88,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 ROOT_URLCONF = 'Prog_EcoEn.ecoen_project.urls'
 WSGI_APPLICATION = 'Prog_EcoEn.ecoen_project.wsgi.application'
@@ -124,6 +140,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]  # carpeta donde guardás tus imágenes, CSS, JS
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
