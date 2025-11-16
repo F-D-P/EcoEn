@@ -10,7 +10,7 @@ urlpatterns = [
 
     # Allauth (login, logout, signup, social login)
     path('accounts/', include('allauth.urls')),
-    
+     
     # Apps propias
     path('', include('Prog_EcoEn.ecoen_app.urls')),   # tu app principal
     path('chatbot/', include('chatbot.urls')),        # tu chatbot si tiene urls propias
