@@ -8,16 +8,21 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from openai import AzureOpenAI
 from django.conf import settings
+from .models import Producto, Opinion, Compra, Puntuacion, Perfil
+from .forms import EditarPerfilForm
+from allauth.account.views import LoginView, SignupView
 
-# Configura tu API key (mejor usar variables de entorno)
-client = AzureOpenAI(
+
+@csrf_exempt
+def chatbot_view(request):
+
+    # Configura tu API key (mejor usar variables de entorno)
+    client = AzureOpenAI(
     api_key=settings.AZURE_OPENAI_API_KEY,
     azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
     api_version=settings.AZURE_OPENAI_API_VERSION,
     )
-
-@csrf_exempt
-def chatbot_view(request):
+    
     if request.method == "POST":
         data = json.loads(request.body)
         user_message = data.get("message", "")
@@ -29,12 +34,6 @@ def chatbot_view(request):
 
         bot_reply = response.choices[0].message.content
         return JsonResponse({"reply": bot_reply})
-
-
-from .models import Producto, Opinion, Compra, Puntuacion, Perfil
-from .forms import EditarPerfilForm
-from allauth.account.views import LoginView, SignupView
-
 
 def index(request):
     productos = Producto.objects.all()
