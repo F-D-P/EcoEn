@@ -8,22 +8,21 @@ import os
 from dotenv import load_dotenv
 
 # Cargar variables de entorno
-BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
+BASE_DIR = Path(__file__).resolve().parent.parent  # Prog_EcoEn
+ENV_PATH = BASE_DIR.parent / ".env"  # ProgIV-EcoEn/.env
 
-# Configuración de Azure OpenAI (Copilot)
-AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")  # ej: https://tu-recurso.openai.azure.com/
+load_dotenv(ENV_PATH)
+
+# Configuración de Azure OpenAI
+AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT") 
 AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_API_VERSION = "2024-08-01-preview"  # versión estable
 
 # Seguridad
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='localhost',
-    cast=lambda v: [s.strip() for s in v.split(',')]
-)
+ALLOWED_HOSTS = ["magaliPonce09.pythonanywhere.com", "localhost", "127.0.0.1"]
+
 
 # Aplicaciones instaladas
 INSTALLED_APPS = [
