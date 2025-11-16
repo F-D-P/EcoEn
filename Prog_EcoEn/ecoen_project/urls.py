@@ -1,5 +1,4 @@
 # Prog_EcoEn/ecoen_project/urls.py
-
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -8,20 +7,15 @@ from django.conf.urls.static import static
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
-=======
-    path('', include('Prog_EcoEn.ecoen_app.urls')),
-    
-]
->>>>>>> 25a60429fedf6817dd0bf052b8b497f8f95e4154
 
     # Allauth (login, logout, signup, social login)
     path('accounts/', include('allauth.urls')),
     
     # Apps propias
     path('', include('Prog_EcoEn.ecoen_app.urls')),   # tu app principal
-    path('chatbot/', include('chatbot.urls')),  # tu chatbot si tiene urls propias
-    ]
+    path('chatbot/', include('chatbot.urls')),        # tu chatbot si tiene urls propias
+]
+
 # Archivos estáticos y media en desarrollo
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
