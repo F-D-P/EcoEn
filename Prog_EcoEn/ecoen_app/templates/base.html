@@ -18,6 +18,7 @@
 
     <!-- Estilos propios DESPUÉS de Bootstrap -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}" />
 </head>
 <body class="light-mode">
 
@@ -80,53 +81,32 @@
           </ul>
         </div>
       </div>
-
-      <!-- Botón flotante con mascotita -->
-      <div id="chatbot-button">
-        <img src="{% static 'img/ecobot.png' %}" alt="EcoBot" style="width: 40px; height: 40px" />
-      </div>
-
-      <!-- Ventana del chatbot -->
-      <div id="chatbot-window">
-        <div id="chatbot-header">🌱 EcoBot</div>
-        <div id="chatbot-messages"></div>
-        <div id="chatbot-input">
-          <input type="text" id="userMessage" placeholder="Escribe tu mensaje..." />
-          <button onclick="sendMessage()">➤</button>
-        </div>
-      </div>
-
-      <link rel="stylesheet" href="{% static 'css/chatbot.css' %}" />
-      <script src="{% static 'js/chatbot.js' %}"></script>
     </nav>
 
     <!-- Contenido dinámico -->
     <main>{% block content %}{% endblock %}</main>
 
+    <!-- Botón flotante con mascotita -->
+    <div id="chatbot-button">
+      <img src="{% static 'img/ecobot.png' %}" alt="EcoBot" style="width: 50px; height: 50px; cursor: pointer;" />
+    </div>
+
     <!-- Overlay detrás del chatbot -->
-    <div class="chatbot-overlay"></div>
+    <div id="chatbot-overlay" style="display: none;"></div>
 
-   <!-- Ventana del chatbot -->
-   <div class="chatbot-window">
-      <header>EcoBot 🌱</header>
-      <div class="chat-content">
-          <!-- mensajes -->
-      </div>
+    <!-- Ventana del chatbot -->
+    <div id="chatbot-window" style="display: none;">
+      <header>🌱 EcoBot</header>
+      <div class="chat-content" id="chatbot-messages"></div>
       <footer>
-          <input type="text" placeholder="Escribe aquí...">
+          <input type="text" id="userMessage" placeholder="Escribe aquí..." />
+          <button onclick="sendMessage()">➤</button>
       </footer>
-   </div>
+    </div>
 
-   <!-- Scripts globales -->
+    <!-- Scripts globales -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      /* tus funciones JS aquí (las que ya tenías) */
-    </script>
-
-  <!-- Scripts al final -->
-   <script src="chatbot.js"></script>
+    <script src="{% static 'js/chatbot.js' %}"></script>
 </body>
 </html>
 
-</body>
-</html>
