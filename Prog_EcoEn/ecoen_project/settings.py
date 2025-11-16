@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "Prog_EcoEn.ecoen_app",
     'django_extensions',
     "chatbot",
+
 ]
 
 # Configuración de allauth
@@ -160,3 +161,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Configuración por defecto de IDs
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Ruta al archivo .env
+env_path = Path(__file__).resolve().parent.parent / '.env'
+load_dotenv(dotenv_path=env_path)
+
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
