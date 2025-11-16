@@ -8,6 +8,12 @@ from django.conf.urls.static import static
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
+<<<<<<< HEAD
+=======
+    path('', include('Prog_EcoEn.ecoen_app.urls')),
+    
+]
+>>>>>>> 25a60429fedf6817dd0bf052b8b497f8f95e4154
 
     # Allauth (login, logout, signup, social login)
     path('accounts/', include('allauth.urls')),
