@@ -1,6 +1,32 @@
 from django.urls import path, include
+from .views import chatbot_view
+import openai 
+from django.http import JsonResponse
+import json
+from django.views.decorators.csrf import csrf_exempt
+
+
+
+
+@csrf_exempt # pyright: ignore[reportUndefinedVariable] # type: ignore
+def chatbot_view(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        user_message = data.get("message", "")
+
+        # Llamada al modelo de IA
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # o el modelo que uses
+            messages=[{"role": "user", "content": user_message}]
+        )
+
+        bot_reply = response["choices"][0]["message"]["content"]
+        return JsonResponse({"reply": bot_reply})
+
+
 from Prog_EcoEn.ecoen_app import views
 from .views import CustomLoginView, CustomSignupView
+
 
 urlpatterns = [
     # Página principal
@@ -20,6 +46,9 @@ urlpatterns = [
     path("perfil/", views.mi_perfil, name="mi_perfil"),
     path("perfil/editar/", views.editar_perfil, name="editar_perfil"),
 
+    path("chat/", chatbot_view, name="chatbot"),
+
+
     # Carrito y compras
     path("carrito/", views.carrito, name="carrito"),
     path("confirmar/<str:metodo>/", views.confirmar_pago, name="confirmar_pago"),
@@ -29,4 +58,5 @@ urlpatterns = [
 
     # Allauth (solo para social login: Google, etc.)
     path("accounts/", include("allauth.urls")),
+
 ]

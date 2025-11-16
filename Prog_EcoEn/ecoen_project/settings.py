@@ -4,20 +4,29 @@ Django settings for ecoen_project project.
 
 from pathlib import Path
 from decouple import config
+import os
+from dotenv import load_dotenv
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Cargar variables de entorno
+BASE_DIR = Path(__file__).resolve().parent.parent  # Prog_EcoEn
+ENV_PATH = BASE_DIR.parent / ".env"  # ProgIV-EcoEn/.env
+
+load_dotenv(ENV_PATH)
+
+# Configuración de Azure OpenAI
+AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT") 
+AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
+AZURE_OPENAI_API_VERSION = "2024-08-01-preview"  # versión estable
 
 # Seguridad
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='localhost',
-    cast=lambda v: [s.strip() for s in v.split(',')]
-)
+SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = os.getenv("DEBUG", "False") == "True"
+ALLOWED_HOSTS = ["magaliPonce09.pythonanywhere.com", "localhost", "127.0.0.1"]
+
 
 # Aplicaciones instaladas
 INSTALLED_APPS = [
+    # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,19 +47,11 @@ INSTALLED_APPS = [
     "chatbot",
 ]
 
+# Configuración de sitios y allauth
 SITE_ID = 1
-
-# Autenticación
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
-
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
-# Configuración de Allauth
-ACCOUNT_EMAIL_VERIFICATION = "none"
+LOGIN_REDIRECT_URL = '/'        # adonde redirige después de login
+LOGOUT_REDIRECT_URL = '/'       # adonde redirige después de logout
+ACCOUNT_EMAIL_VERIFICATION = "none"  # puedes poner "mandatory" si quieres verificar emails
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -62,6 +63,12 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+# Autenticación
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Middleware
 MIDDLEWARE = [
@@ -120,11 +127,11 @@ USE_TZ = True
 
 # Archivos estáticos
 STATIC_URL = '/static/'
-
-# Si quieres carpeta global de estáticos, descomenta:
-# STATICFILES_DIRS = [BASE_DIR / "static"]
-
+STATICFILES_DIRS = [BASE_DIR / "static"]  # opcional, si quieres carpeta global
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Whitenoise config
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Archivos multimedia
 MEDIA_URL = '/media/'
@@ -132,3 +139,10 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Configuración por defecto de IDs
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Ruta al archivo .env
+env_path = Path(__file__).resolve().parent.parent / '.env'
+load_dotenv(dotenv_path=env_path)
+
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
