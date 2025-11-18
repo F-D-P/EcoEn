@@ -1,3 +1,16 @@
+/* Animaciones */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOutDown {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(30px); }
+}
+
+.fadeInUp { animation: fadeInUp 0.4s ease forwards; }
+.fadeOutDown { animation: fadeOutDown 0.4s ease forwards; }
+
 /* Botón flotante del chatbot */
 #chatbot-button {
   position: fixed;
@@ -9,15 +22,13 @@
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  z-index: 100000; /* muy alto para estar encima de todo */
+  z-index: 100000;
 }
-
 #chatbot-button img {
   width: 40px;
   height: 40px;
   display: block;
 }
-
 #chatbot-button:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 16px rgba(0,0,0,0.4);
@@ -33,8 +44,6 @@
   visibility: hidden;
   transition: opacity 0.3s ease;
 }
-
-/* Estado visible del overlay */
 .chatbot-overlay.active {
   opacity: 1;
   visibility: visible;
@@ -45,12 +54,13 @@
   position: fixed;
   bottom: 80px;
   right: 20px;
-  width: 400px;       /* tamaño más grande en escritorio */
+  width: 400px;
   height: 500px;
-  background: #fff;
+  background: linear-gradient(135deg, #66BB6A, #2E7D32); /* verdes más vivos */
+  color: #fff;
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-  z-index: 100001;    /* más alto que cualquier imagen o texto */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  z-index: 100001;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -60,8 +70,6 @@
   transform: translateY(20px);
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
-/* Estado visible de la ventana */
 .chatbot-window.active {
   opacity: 1;
   visibility: visible;
@@ -70,13 +78,22 @@
 
 /* Header del chatbot */
 #chatbot-header {
-  background: #4CAF50;
-  color: #fff;
+  background: #1B5E20;
   padding: 12px;
   text-align: center;
   font-weight: bold;
   font-size: 16px;
-  border-radius: 12px 12px 0 0;
+  color: #fff;
+  position: relative;
+}
+#chatbot-header::after {
+  content: "❌";
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
+#chatbot-header::after:hover {
+  color: #FF7043;
 }
 
 /* Área de mensajes */
@@ -85,75 +102,70 @@
   padding: 12px;
   overflow-y: auto;
   background: #f9f9f9;
+  color: #000;
 }
 
 /* Input del chatbot */
 #chatbot-input {
   display: flex;
-  border-top: 1px solid #ddd;
-  background: #fff;
+  padding: 10px;
+  background: #388E3C;
 }
-
 #chatbot-input input {
   flex: 1;
   border: none;
-  padding: 10px;
+  border-radius: 6px;
+  padding: 8px;
   font-size: 14px;
   outline: none;
 }
-
 #chatbot-input button {
-  background: #4CAF50;
+  margin-left: 8px;
+  background: #1B5E20;
   color: #fff;
   border: none;
-  padding: 10px 16px;
+  border-radius: 6px;
+  padding: 8px 12px;
   cursor: pointer;
-  font-size: 18px;
-  border-radius: 0 0 12px 0;
   transition: background 0.2s ease;
 }
-
 #chatbot-input button:hover {
-  background: #45a049;
+  background: #66BB6A;
 }
 
-/* Responsive para tablets y móviles */
+/* Responsive */
 @media (max-width: 768px) {
   .chatbot-window {
-    width: 90%;          /* ocupa casi todo el ancho */
-    height: 60%;         /* más bajo para no tapar todo */
+    width: 90%;
+    height: 60%;
     bottom: 10px;
     right: 5%;
     border-radius: 10px;
   }
 }
-
 @media (max-width: 480px) {
   .chatbot-window {
-    width: 100%;         /* ocupa todo el ancho en móvil */
-    height: 70%;         /* más alto en pantallas pequeñas */
+    width: 100%;
+    height: 70%;
     bottom: 0;
     right: 0;
-    border-radius: 0;    /* estilo tipo app móvil */
+    border-radius: 0;
   }
-
   #chatbot-header {
-    font-size: 14px;     /* texto más pequeño en móvil */
+    font-size: 14px;
     padding: 10px;
   }
-
   #chatbot-input input {
     font-size: 12px;
     padding: 8px;
   }
-
   #chatbot-input button {
     font-size: 16px;
     padding: 8px 12px;
   }
 }
 
-/* Overlay y menú lateral siempre debajo del chatbot */
+/* Otros elementos siempre debajo del chatbot */
 .menu-overlay,
 .menu-lateral,
 .carousel,
@@ -161,14 +173,7 @@
 .carousel-control-prev,
 .carousel-control-next,
 .carousel-indicators {
-  z-index: 1000; /* mucho más bajo que el chatbot */
+  z-index: 1000;
 }
 
-/* Chatbot siempre arriba */
-#chatbot-window {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 99999; /* garantizado por encima */
-}
 
