@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section class="container py-5">
+  <h2 class="text-center mb-4">✅ Resumen de Compra</h2>
+
+  <div class="card shadow-sm p-4">
+    <h4 class="mb-3 text-success">🛍️ Productos seleccionados</h4>
+    <ul class="list-group mb-4" id="resumen-productos"></ul>
+
+    <h5 class="text-end mb-4">Total: <span id="resumen-total" class="fw-bold text-success">$0 ARS</span></h5>
+
+    <!-- Ticket efectivo -->
+    <div id="ticket-efectivo" class="border rounded p-4 bg-light d-none">
+      <h5 class="fw-bold mb-3">🧾 Ticket de Pago (Efectivo)</h5>
+      <p>Presentá este ticket en cualquier Rapipago o Pago Fácil para completar tu compra.</p>
+      <p><strong>Referencia:</strong> <span id="codigo-pago" class="text-primary">#RAPI-{{ request.user.id }}-{{ request.user.username }}</span></p>
+      <p><strong>Importe:</strong> <span id="importe-pago" class="fw-bold text-success">$0 ARS</span></p>
+      <p><strong>Válido hasta:</strong> {{ now|date:"d/m/Y" }} + 3 días</p>
+
+      <!-- Bloque QR -->
+      <div id="qr-pago" class="text-center mt-3 d-none">
+        <h6>📱 Escaneá este código en Rapipago/Pago Fácil</h6>
+        <div id="codigo-qr"></div>
+        <a id="descargar-qr" class="btn btn-outline-primary mt-3 d-none">⬇ Descargar QR</a>
+      </div>
+    </div>
+
+    <!-- Botón Mercado Pago (simulado con contador y alerta) -->
+    <div id="mercado-pago" class="text-center d-none mt-4">
+      <h5 class="fw-bold mb-3">💳 Pago con Mercado Pago</h5>
+      <p>Tenés <span id="contador-tiempo" class="fw-bold text-danger">10:00</span> minutos para completar el pago.</p>
+      <a id="btn-mercado-pago" href="#" class="btn btn-primary btn-lg">🔗 Pagar con Mercado Pago</a>
+      <div id="alerta-expiracion" class="alert alert-warning mt-3 d-none">
+        ⏳ Tu sesión de pago venció. Volvé a elegir un método de pago para continuar.
+        <div class="mt-2">
+          <a href="{% url 'productos' %}" class="btn btn-secondary">⬅ Volver al catálogo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-end mt-4">
+      <a href="{% url 'productos' %}" class="btn btn-secondary">⬅ Volver al catálogo</a>
+    </div>
+  </div>
+</section>
+
+<!-- Librería QR -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const productos = JSON.parse(localStorage.getItem("carrito")) || [];
+    const resumenLista = document.getElementById("resumen-productos");
+    const resumenTotal = document.getElementById("resumen-total");
+    const ticket = document.getElementById("ticket-efectivo");
+    const importePago = document.getElementById("importe-pago");
+    const mercadoPagoDiv = document.getElementById("mercado-pago");
+    const btnMercadoPago = document.getElementById("btn-mercado-pago");
+    const contadorTiempo = document.getElementById("contador-tiempo");
+    const alertaExpiracion = document.getElementById("alerta-expiracion");
+
+    const metodo = localStorage.getItem("metodo_pago") || "mercado-pago";
+    let total = 0;
+
+    if (productos.length === 0) {
+      resumenLista.innerHTML = `<li class="list-group-item text-muted">No hay productos en el carrito.</li>`;
+      resumenTotal.textContent = "$0 ARS";
+      return;
+    }
+
+    productos.forEach(item => {
+      const subtotal = item.precio * item.cantidad;
+      total += subtotal;
+
+      const li = document.createElement("li");
+      li.className = "list-group-item d-flex justify-content-between align-items-center";
+      li.innerHTML = `
+        ${item.nombre} <span class="badge bg-success rounded-pill">$${subtotal.toLocaleString()}</span>
+      `;
+      resumenLista.appendChild(li);
+    });
+
+    resumenTotal.textContent = `$${total.toLocaleString()} ARS`;
+    importePago.textContent = `$${total.toLocaleString()} ARS`;
+
+    if (metodo === "efectivo") {
+      ticket.classList.remove("d-none");
+
+      const qrContainer = document.getElementById("qr-pago");
+      qrContainer.classList.remove("d-none");
+
+      const codigo = document.getElementById("codigo-pago").textContent;
+      const importe = importePago.textContent;
+      const vencimiento = "{{ now|date:'d/m/Y' }} + 3 días";
+
+      const datosQR = `Referencia: ${codigo}\nImporte: ${importe}\nVálido hasta: ${vencimiento}`;
+
+      new QRCode(document.getElementById("codigo-qr"), {
+        text: datosQR,
+        width: 180,
+        height: 180,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      setTimeout(() => {
+        const qrCanvas = document.querySelector("#codigo-qr canvas");
+        if (qrCanvas) {
+          const linkDescarga = document.getElementById("descargar-qr");
+          linkDescarga.href = qrCanvas.toDataURL("image/png");
+          linkDescarga.download = "ticket_qr.png";
+          linkDescarga.classList.remove("d-none");
+        }
+      }, 500);
+    } else if (metodo === "mercado-pago") {
+      mercadoPagoDiv.classList.remove("d-none");
+
+      // 🔹 Simulación: redirigir a un link ficticio de checkout
+      btnMercadoPago.href = "https://www.mercadopago.com.ar/checkout/v1?pref_id=SIMULADO123";
+
+      // 🔹 Contador de 10 minutos
+      let tiempoRestante = 10 * 60; // 10 minutos en segundos
+      const intervalo = setInterval(() => {
+        const minutos = Math.floor(tiempoRestante / 60);
+        const segundos = tiempoRestante % 60;
+        contadorTiempo.textContent = `${minutos}:${segundos.toString().padStart(2, "0")}`;
+
+        if (tiempoRestante <= 0) {
+          clearInterval(intervalo);
+          contadorTiempo.textContent = "Expirado";
+          btnMercadoPago.classList.add("disabled");
+          btnMercadoPago.textContent = "⏳ Tiempo de pago expirado";
+          btnMercadoPago.href = "#";
+          alertaExpiracion.classList.remove("d-none");
+        }
+        tiempoRestante--;
+      }, 1000);
+    }
+  });
+</script>
+
+{% endblock %}

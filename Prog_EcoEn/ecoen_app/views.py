@@ -11,7 +11,7 @@ from django.conf import settings
 from .models import Producto, Opinion, Compra, Puntuacion, Perfil
 from .forms import EditarPerfilForm
 from allauth.account.views import LoginView, SignupView
-
+from django.utils import timezone
 
 @csrf_exempt
 def chatbot_view(request):
@@ -208,3 +208,7 @@ class CustomLoginView(LoginView):
 
 class CustomSignupView(SignupView):
     template_name = "account/signup.html"
+
+
+def resumen_compra(request):
+    return render(request, "resumen_compra.html", {"now": timezone.now()})

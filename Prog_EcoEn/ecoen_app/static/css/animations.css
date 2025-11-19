@@ -56,22 +56,8 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ===========================
-   🎯 Usos recomendados
-   =========================== */
-/*
-- Carrito:
-  #carrito-vacio { @extend .fade-in; }
-  filas al eliminar/agregar → .slide-up o .bounce
+/* Animación elegante para menú lateral */
+.menu-lateral.active {
+  animation: fadeInRight 0.5s ease forwards;
+}
 
-- Detalle de producto:
-  Imagen → .fade-in
-  Estrellas rating → .scale-up al seleccionar
-
-- Formularios:
-  Inputs → .glow-green al focus
-  Mensajes de validación → .slide-up
-
-- Botones:
-  Al hacer click → .bounce
-*/

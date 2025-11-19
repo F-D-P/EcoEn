@@ -1,34 +1,42 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-<section class="container py-5">
-  <div class="row">
-    <div class="col-md-6">
-      <img src="{{ producto.imagen.url }}" class="img-fluid rounded shadow" alt="{{ producto.nombre }}">
+
+<section class="container py-5 fade-in">
+  <div class="row g-4 align-items-center">
+    <!-- Imagen del producto -->
+    <div class="col-md-6 text-center">
+      <img src="{{ producto.imagen.url }}" 
+           class="img-fluid rounded shadow-lg scale-up" 
+           alt="{{ producto.nombre }}" 
+           style="max-height: 400px; object-fit: cover;">
     </div>
+
     <div class="col-md-6">
-      <h2 class="fw-bold">{{ producto.nombre }}</h2>
-      <p class="lead">{{ producto.descripcion }}</p>
-      <p class="text-success fw-bold">Precio: ${{ producto.precio|floatformat:0 }} ARS</p>
-      <p class="text-warning">⭐ Promedio: {{ producto.promedio_puntuacion }} / 5</p>
+      <h2 class="fw-bold mb-3 text-success">{{ producto.nombre }}</h2>
+      <p class="lead text-muted">{{ producto.descripcion }}</p>
+      <p class="text-success fw-bold fs-5">💲 Precio: ${{ producto.precio|floatformat:0 }} ARS</p>
+      <p class="text-warning fs-6">⭐ Promedio: {{ producto.promedio_puntuacion }} / 5</p>
 
       <!-- Rating interactivo -->
-      <div class="rating mb-3">
+      <div class="rating mb-4 d-flex gap-1" role="radiogroup" aria-label="Calificación del producto">
         {% for i in "12345" %}
           {% with val=i|stringformat:"i" %}
             <span class="star {% if puntuacion_usuario|stringformat:"s" >= val %}selected{% endif %}" 
-                  data-value="{{ val }}" role="button" aria-label="Calificar {{ val }} estrellas">★</span>
+                  data-value="{{ val }}" role="radio" aria-label="{{ val }} estrellas">★</span>
           {% endwith %}
         {% endfor %}
       </div>
 
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-success add-to-cart"
+      <!-- Botones -->
+      <div class="d-flex gap-3">
+        <button class="btn btn-outline-success add-to-cart fw-bold"
                 data-product="{{ producto.nombre }}"
                 data-price="{{ producto.precio }}"
                 data-product-id="{{ producto.id }}">
           🛒 Agregar al carrito
         </button>
-        <a href="{% url 'productos' %}" class="btn btn-secondary">⬅ Volver</a>
+        <a href="{% url 'productos' %}" class="btn btn-secondary fw-bold">⬅ Volver</a>
       </div>
     </div>
   </div>
@@ -53,6 +61,11 @@
       }
 
       localStorage.setItem("carrito", JSON.stringify(carrito));
+
+      // Feedback visual
+      boton.classList.add("bounce");
+      setTimeout(() => boton.classList.remove("bounce"), 600);
+
       alert(`${nombre} agregado al carrito ✅`);
     });
 
@@ -62,10 +75,16 @@
       star.addEventListener("click", () => {
         estrellas.forEach(s => s.classList.remove("selected"));
         star.classList.add("selected");
+
+        // Feedback visual
+        star.classList.add("scale-up");
+        setTimeout(() => star.classList.remove("scale-up"), 300);
+
         alert(`Calificaste con ${star.dataset.value} ⭐`);
         // Aquí podrías enviar la puntuación al backend vía AJAX
       });
     });
   });
 </script>
+
 {% endblock %}
