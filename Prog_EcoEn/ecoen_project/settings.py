@@ -21,7 +21,7 @@ AZURE_OPENAI_API_VERSION = "2024-08-01-preview"  # versión estable
 # Seguridad
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = ["magaliPonce09.pythonanywhere.com", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["1234franco1234.pythonanywhere.com", "localhost", "127.0.0.1"]
 
 
 # Aplicaciones instaladas
@@ -105,8 +105,8 @@ TEMPLATES = [
     },
 ]
 
-ROOT_URLCONF = 'Prog_EcoEn.ecoen_project.urls'
-WSGI_APPLICATION = 'Prog_EcoEn.ecoen_project.wsgi.application'
+ROOT_URLCONF = 'ecoen_project.urls'
+WSGI_APPLICATION = 'ecoen_project.wsgi.application'
 
 # Base de datos
 DATABASES = {
