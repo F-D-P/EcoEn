@@ -7,6 +7,7 @@ document.querySelectorAll(".slider").forEach((slider) => {
   const nextBtn = slider.querySelector("#next");
   const prevBtn = slider.querySelector("#prev");
   let current = 0;
+  let autoSlide;
 
   function showSlide(index) {
     slides.forEach((slide, i) => {
@@ -16,59 +17,63 @@ document.querySelectorAll(".slider").forEach((slider) => {
     current = index;
   }
 
+  function startAutoSlide() {
+    clearInterval(autoSlide);
+    autoSlide = setInterval(() => {
+      showSlide((current + 1) % slides.length);
+    }, 5000);
+  }
+
   nextBtn?.addEventListener("click", () => {
     showSlide((current + 1) % slides.length);
+    startAutoSlide();
   });
 
   prevBtn?.addEventListener("click", () => {
     showSlide((current - 1 + slides.length) % slides.length);
+    startAutoSlide();
   });
 
   dots.forEach((dot, i) => {
-    dot.addEventListener("click", () => showSlide(i));
+    dot.addEventListener("click", () => {
+      showSlide(i);
+      startAutoSlide();
+    });
   });
 
-  setInterval(() => {
-    showSlide((current + 1) % slides.length);
-  }, 5000);
+  showSlide(0);
+  startAutoSlide();
 });
 
-// === MODO OSCURO/CLARO, CARRITO, PAGO, PUNTUACIÓN ===
+// === DOM READY ===
 document.addEventListener("DOMContentLoaded", () => {
   // === MODO OSCURO/CLARO ===
-  const toggleBtn = document.getElementById("themeToggle");
+  const toggleBtn = document.getElementById("theme-toggle");
   const body = document.body;
 
   if (toggleBtn) {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      body.classList.add("dark-mode");
-      body.classList.remove("light-mode");
-      toggleBtn.textContent = "☀️ Modo claro";
-    } else {
-      body.classList.add("light-mode");
-      body.classList.remove("dark-mode");
-      toggleBtn.textContent = "🌙 Modo oscuro";
-    }
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
 
     toggleBtn.addEventListener("click", () => {
-      body.classList.toggle("dark-mode");
-      body.classList.toggle("light-mode");
-
-      if (body.classList.contains("dark-mode")) {
-        toggleBtn.textContent = "☀️ Modo claro";
-        localStorage.setItem("theme", "dark");
-      } else {
-        toggleBtn.textContent = "🌙 Modo oscuro";
-        localStorage.setItem("theme", "light");
-      }
+      const newTheme = body.classList.contains("dark-mode") ? "light" : "dark";
+      setTheme(newTheme);
     });
+  }
+
+  function setTheme(mode) {
+    body.classList.toggle("dark-mode", mode === "dark");
+    body.classList.toggle("light-mode", mode === "light");
+    toggleBtn.textContent = mode === "dark" ? "☀️ Modo claro" : "🌙 Modo oscuro";
+    toggleBtn.setAttribute("aria-pressed", mode === "dark");
+    localStorage.setItem("theme", mode);
   }
 
   // === CARRITO DE COMPRAS ===
   const carritoLista = document.getElementById("carrito-lista");
   const carritoTotal = document.getElementById("carrito-total");
   const monedaSelect = document.getElementById("moneda");
+  const carritoVacio = document.getElementById("carrito-vacio");
 
   let carrito = [];
   const tasaCambio = { USD: 1, EUR: 0.92, ARS: 880 };
@@ -77,27 +82,30 @@ document.addEventListener("DOMContentLoaded", () => {
     carritoLista.innerHTML = "";
     let totalUSD = 0;
 
+    if (carrito.length === 0) {
+      carritoVacio?.classList.remove("d-none");
+      carritoTotal.textContent = "0.00";
+      return;
+    } else {
+      carritoVacio?.classList.add("d-none");
+    }
+
     carrito.forEach((item, index) => {
       totalUSD += item.precio;
       const li = document.createElement("li");
-      li.className =
-        "list-group-item d-flex justify-content-between align-items-center";
+      li.className = "list-group-item d-flex justify-content-between align-items-center";
 
-      const spanNombre = document.createElement("span");
-      spanNombre.textContent = item.nombre;
+      li.innerHTML = `
+        <span>${item.nombre}</span>
+        <span>$${item.precio}</span>
+        <button class="btn btn-sm btn-danger">🗑️</button>
+      `;
 
-      const spanPrecio = document.createElement("span");
-      spanPrecio.textContent = `$${item.precio}`;
-
-      const btnEliminar = document.createElement("button");
-      btnEliminar.className = "btn btn-sm btn-danger";
-      btnEliminar.textContent = "🗑️";
-      btnEliminar.addEventListener("click", () => {
+      li.querySelector("button").addEventListener("click", () => {
         carrito.splice(index, 1);
         actualizarCarrito();
       });
 
-      li.append(spanNombre, spanPrecio, btnEliminar);
       carritoLista.appendChild(li);
     });
 
@@ -123,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const datosTransferencia = document.getElementById("datos-transferencia");
 
   btnComprar?.addEventListener("click", () => {
-    if (carritoLista.children.length === 0) {
+    if (carrito.length === 0) {
       alert("Tu carrito está vacío.");
       return;
     }
@@ -141,46 +149,64 @@ document.addEventListener("DOMContentLoaded", () => {
   // === PUNTUACIÓN DE PRODUCTOS ===
   document.querySelectorAll(".rating").forEach((ratingBlock) => {
     const stars = ratingBlock.querySelectorAll(".star");
-    const productName = ratingBlock
-      .closest(".card-body")
-      ?.querySelector(".card-title")?.textContent;
+    const productName = ratingBlock.closest(".card-body")?.querySelector(".card-title")?.textContent;
 
     const savedRating = localStorage.getItem(`rating_${productName}`);
     if (savedRating) {
-      stars.forEach((s, i) => {
-        s.classList.toggle("text-warning", i < parseInt(savedRating));
-      });
+      stars.forEach((s, i) => s.classList.toggle("text-warning", i < parseInt(savedRating)));
     }
 
     stars.forEach((star) => {
       star.addEventListener("click", () => {
         const selectedValue = parseInt(star.dataset.value);
-        stars.forEach((s, i) => {
-          s.classList.remove("text-warning");
-          if (i < selectedValue) s.classList.add("text-warning");
-        });
-
-        if (productName) {
-          localStorage.setItem(`rating_${productName}`, selectedValue);
-          alert(
-            `Puntuaste "${productName}" con ${selectedValue} estrella${
-              selectedValue > 1 ? "s" : ""
-            } ⭐`
-          );
-        }
+        stars.forEach((s, i) => s.classList.toggle("text-warning", i < selectedValue));
+        if (productName) localStorage.setItem(`rating_${productName}`, selectedValue);
       });
     });
   });
 });
 
-// === MENÚ LATERAL ===
+// Menú hamburguesa con animación
 function toggleMenu() {
   const menu = document.getElementById("menu-lateral");
+  const overlay = document.getElementById("menu-overlay");
   const icon = document.getElementById("menu-icon");
 
-  menu.classList.toggle("active");
+  if (menu.classList.contains("active")) {
+    cerrarMenu();
+  } else {
+    menu.classList.add("active");
+    overlay.classList.add("active");
+    icon.textContent = "✖";
+    menu.setAttribute("aria-hidden", false);
+    overlay.setAttribute("aria-hidden", false);
+  }
+}
 
-  icon.textContent = menu.classList.contains("active")
-    ? "✖"
-    : icon.dataset.default || "☰";
+function cerrarMenu() {
+  const menu = document.getElementById("menu-lateral");
+  const overlay = document.getElementById("menu-overlay");
+  const icon = document.getElementById("menu-icon");
+
+  // Añadimos clase de salida
+  menu.classList.add("closing");
+
+  // Esperamos a que termine la animación
+  menu.addEventListener("animationend", () => {
+    menu.classList.remove("active", "closing");
+    overlay.classList.remove("active");
+    icon.textContent = icon.dataset.default || "☰";
+    menu.setAttribute("aria-hidden", true);
+    overlay.setAttribute("aria-hidden", true);
+  }, { once: true });
+}
+
+// Overlay y Escape cierran menú
+document.getElementById("menu-overlay").addEventListener("click", cerrarMenu);
+document.addEventListener("keydown", e => { if (e.key === "Escape") cerrarMenu(); });
+
+// Configuración toggle
+function toggleConfig() {
+  const config = document.getElementById("config-options");
+  config.classList.toggle("active");
 }

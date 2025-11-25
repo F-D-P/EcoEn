@@ -2,36 +2,71 @@
    ✨ Animaciones Globales
    =========================== */
 
+:root {
+  --anim-fast: 0.3s;
+  --anim-medium: 0.6s;
+  --anim-slow: 1s;
+  --ease-smooth: cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
 /* Fade-in suave */
 .fade-in {
-  animation: fadeIn 0.6s ease forwards;
+  animation: fadeIn var(--anim-medium) var(--ease-smooth) forwards;
 }
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Fade-out */
+.fade-out {
+  animation: fadeOut var(--anim-medium) var(--ease-smooth) forwards;
+}
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(10px); }
+}
+
 /* Fade-in lateral (para menús o paneles) */
 .fade-in-right {
-  animation: fadeInRight 0.5s ease forwards;
+  animation: fadeInRight var(--anim-medium) var(--ease-smooth) forwards;
 }
 @keyframes fadeInRight {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateX(40px); filter: blur(2px); }
+  to   { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+
+/* Fade-out lateral */
+.fade-out-right {
+  animation: fadeOutRight var(--anim-medium) var(--ease-smooth) forwards;
+}
+@keyframes fadeOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(40px); }
 }
 
 /* Escala suave (para botones y cards) */
 .scale-up {
-  animation: scaleUp 0.3s ease forwards;
+  animation: scaleUp var(--anim-fast) var(--ease-smooth) forwards;
 }
 @keyframes scaleUp {
   from { transform: scale(0.95); opacity: 0.8; }
   to   { transform: scale(1); opacity: 1; }
 }
 
-/* Bounce ligero (para feedback de carrito) */
+/* Pulso ligero (hover en botones) */
+.pulse:hover {
+  animation: pulse var(--anim-fast) ease-in-out;
+}
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Bounce ligero (para feedback de carrito o botones) */
 .bounce {
-  animation: bounce 0.6s ease;
+  animation: bounce 0.6s var(--ease-smooth);
 }
 @keyframes bounce {
   0%   { transform: scale(1); }
@@ -43,16 +78,25 @@
 
 /* Glow verde eco (para inputs y focus) */
 .glow-green:focus {
-  box-shadow: 0 0 8px #4CAF50;
-  transition: box-shadow 0.3s ease;
+  box-shadow: 0 0 10px #4CAF50;
+  transition: box-shadow var(--anim-fast) ease-in-out;
 }
 
 /* Slide-up (para alertas y mensajes) */
 .slide-up {
-  animation: slideUp 0.5s ease forwards;
+  animation: slideUp var(--anim-fast) var(--ease-smooth) forwards;
 }
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide-down (para desplegables) */
+.slide-down {
+  animation: slideDown var(--anim-fast) var(--ease-smooth) forwards;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -60,4 +104,116 @@
 .menu-lateral.active {
   animation: fadeInRight 0.5s ease forwards;
 }
+.menu-lateral.closing {
+  animation: fadeOutRight 0.5s ease forwards;
+}
 
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(40px); }
+}
+
+/* Animación para el icono hamburguesa */
+#menu-icon {
+  display: inline-block;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+/* Estado abierto (✖) */
+#menu-icon.open {
+  transform: rotate(180deg);
+  opacity: 0.8;
+}
+
+/* Estado cerrado (☰) */
+#menu-icon.closed {
+  transform: rotate(0deg);
+  opacity: 1;
+}
+
+/* ===========================
+   🌈 Fondo degradado animado
+   =========================== */
+body.login-bg {
+  background: linear-gradient(-45deg, #2e7d32, #43a047, #81c784, #c8e6c9);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===========================
+   ⏱️ Delays coordinados
+   =========================== */
+.fade-in-right:nth-child(1) { animation-delay: 0.2s; }
+.fade-in-right:nth-child(2) { animation-delay: 0.4s; }
+.fade-in-right:nth-child(3) { animation-delay: 0.6s; }
+.fade-in-right:nth-child(4) { animation-delay: 0.8s; }
+
+/* ===========================
+   ✨ Animaciones de entrada
+   =========================== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Escala suave */
+.scale-up {
+  transform: scale(0.95);
+  animation: scaleUp 0.6s ease forwards;
+}
+
+@keyframes scaleUp {
+  0% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+/* Botón con pulso */
+.pulse {
+  animation: pulseAnim 2s infinite;
+}
+
+@keyframes pulseAnim {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Rebote al enviar */
+.bounce {
+  animation: bounceAnim 0.6s;
+}
+
+@keyframes bounceAnim {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ===========================
+   ⏱️ Delays progresivos para login/signup
+   =========================== */
+.delay-1 { animation-delay: 0.3s; }
+.delay-2 { animation-delay: 0.6s; }
+.delay-3 { animation-delay: 0.9s; }
+.delay-4 { animation-delay: 1.2s; }

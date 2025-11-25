@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ecoen
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn Prog_EcoEn.wsgi:application"
+    plan: free
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: Prog_EcoEn.settings
+      - key: SECRET_KEY
+        value: "pon-tu-secret-key-aqui"
+      - key: DEBUG
+        value: "False"

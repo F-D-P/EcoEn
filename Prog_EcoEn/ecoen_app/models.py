@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.auth.models import User
-
-from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Opinion(models.Model):
     nombre = models.CharField(max_length=100)
@@ -11,46 +10,40 @@ class Opinion(models.Model):
     def __str__(self):
         return f"{self.nombre}: {self.mensaje[:30]}..."
 
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    es_cliente = models.BooleanField(default=True)
+    es_vendedor = models.BooleanField(default=False)
+    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.nombre}: {self.mensaje[:30]}..."
-
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+        return f"{self.user.username} ({'Cliente' if self.es_cliente else 'Vendedor'})"
 
 @receiver(post_save, sender=User)
 def crear_perfil_usuario(sender, instance, created, **kwargs):
     if created:
         Perfil.objects.create(user=instance)
 
-class Perfil(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    es_cliente = models.BooleanField(default=True)
-    es_vendedor = models.BooleanField(default=False)
-    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)            # ✅ agregado
-    website = models.URLField(blank=True, null=True)         # ✅ agregado
-
-    def __str__(self):
-        return f"{self.user.username} ({'Cliente' if self.es_cliente else 'Vendedor'})"
-    
 class Producto(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     imagen = models.ImageField(upload_to="productos/")
     vendedor = models.ForeignKey(User, on_delete=models.CASCADE)
+    destacado = models.BooleanField(default=False)  # opcional para inicio
+    ventas = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.nombre
-    
+
     @property
     def promedio_puntuacion(self):
         puntuaciones = self.puntuaciones.all()
         if puntuaciones.exists():
             return round(sum(p.valor for p in puntuaciones) / puntuaciones.count(), 1)
         return 0
-
 
 class Puntuacion(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='puntuaciones')
@@ -59,11 +52,10 @@ class Puntuacion(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('producto', 'usuario')  # Un usuario solo puede puntuar una vez
+        unique_together = ('producto', 'usuario')
 
     def __str__(self):
         return f"{self.usuario.username} → {self.producto.nombre}: {self.valor}⭐"
-
 
 class Compra(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -74,4 +66,3 @@ class Compra(models.Model):
 
     def __str__(self):
         return f"{self.usuario.username} - {self.metodo_pago} - {self.total} ARS"
-

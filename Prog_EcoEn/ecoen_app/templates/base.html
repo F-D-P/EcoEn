@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
     {% load static %}
     {% load socialaccount %}
@@ -13,90 +13,79 @@
     <!-- Fuentes -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
 
-    <!-- Bootstrap primero -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Estilos propios DESPUÉS de Bootstrap -->
+    <!-- Estilos propios -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/animations.css' %}" />
 </head>
-<body class="light-mode">
+<body class="light-mode {% block body_class %}{% endblock %}">
 
-<!-- Botón flotante hamburguesa -->
-<div id="menu-toggle" onclick="toggleMenu()" class="menu-toggle"
-     aria-controls="menu-lateral"
-     aria-expanded="false"
-     aria-label="Abrir menú">
-  <span id="menu-icon">☰</span>
-</div>
+{% if request.resolver_match.url_name != 'custom_login' and request.resolver_match.url_name != 'custom_signup' %}
+  <!-- Botón hamburguesa -->
+  <div id="menu-toggle" onclick="toggleMenu()" class="menu-toggle"
+       aria-controls="menu-lateral"
+       aria-expanded="false"
+       aria-label="Abrir menú">
+    <span id="menu-icon" data-default="☰" class="closed">☰</span>
+  </div>
 
-<!-- Overlay -->
-<div id="menu-overlay" class="menu-overlay"></div>
+  <!-- Overlay -->
+  <div id="menu-overlay" class="menu-overlay" aria-hidden="true"></div>
 
-<!-- Menú lateral derecho -->
-<div id="menu-lateral" class="menu-lateral" role="dialog" aria-modal="true" aria-label="Menú lateral">
-  <div class="menu-stack">
-    {% if user.is_authenticated %}
-      <p class="menu-header">👋 Hola, {{ user.username }}</p>
-      <a href="{% url 'custom_logout' %}" class="btn btn-danger">Cerrar sesión</a>
-    {% else %}
-      <button onclick="toggleLoginOptions()" class="btn btn-primary">🔐 Iniciar sesión</button>
-      <div id="login-options" class="collapse-area">
-        <a href="{% url 'custom_login' %}" class="btn btn-outline-primary">Iniciar sesión con usuario</a>
-        <p class="text-center mt-2">
-          ¿No tienes una cuenta?
-          <a href="{% url 'custom_signup' %}" class="text-success">Regístrate aquí</a>
-        </p>
+  <!-- Menú lateral -->
+  <div id="menu-lateral" class="menu-lateral" role="dialog" aria-hidden="true" aria-label="Menú lateral">
+    <div class="menu-stack">
+      {% if user.is_authenticated %}
+        <p class="menu-header">👋 Hola, {{ user.username }}</p>
+        <a href="{% url 'custom_logout' %}" class="btn btn-danger">Cerrar sesión</a>
+      {% else %}
+        <a href="{% url 'custom_login' %}" class="btn btn-primary">🔐 Iniciar sesión</a>
+      {% endif %}
+
+      <a href="{% url 'mi_perfil' %}" class="btn btn-outline-secondary">👤 Ver perfil</a>
+
+      <!-- Configuración debajo de perfil -->
+      <div class="config-section">
+        <button onclick="toggleConfig()" class="btn btn-secondary w-100">⚙️ Configuración</button>
+        <div id="config-options" class="config-bottom">
+          <button id="theme-toggle" class="btn btn-dark w-100">🌙 Modo oscuro / claro</button>
+        </div>
       </div>
-    {% endif %}
-
-    <a href="{% url 'mi_perfil' %}" class="btn btn-outline-secondary">👤 Ver perfil</a>
-
-    <button onclick="toggleConfig()" class="btn btn-secondary">⚙️ Configuración</button>
-    <div id="config-options" class="collapse-area">
-      <button onclick="toggleDarkMode()" class="btn btn-dark">🌙 Modo oscuro / claro</button>
     </div>
   </div>
-</div>
 
-<!-- Header -->
-<header class="text-center p-4 bg-azul">
-  {% block header_title %}
-    <h1 class="m-0">🌱 Energía Renovable</h1>
-  {% endblock %}
-</header>
+  <!-- Header -->
+  <header class="text-center p-4 bg-azul">
+    {% block header_title %}
+      <h1 class="m-0">🌱 Energía Renovable</h1>
+    {% endblock %}
+  </header>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-azul">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarEcoEn" aria-controls="navbarEcoEn" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarEcoEn">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Inicio</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'productos' %}">Productos</a></li>
-        <li class="nav-item"><a class="nav-link" href="#reseñas">Reseñas</a></li>
-        <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-      </ul>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-azul">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarEcoEn" aria-controls="navbarEcoEn" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarEcoEn">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'productos' %}">Productos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#reseñas">Reseñas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+{% endif %}
 
-<!-- Contenido dinámico -->
-<main>{% block content %}{% endblock %}</main>
-
-<!-- Botón flotante con mascotita -->
-<div id="chatbot-button">
+<!-- Chatbot (siempre visible) -->
+<div id="chatbot-button" role="button" aria-label="Abrir chatbot">
   <img src="{% static 'img/ecobot.png' %}" alt="EcoBot" style="width: 50px; height: 50px; cursor: pointer;" />
 </div>
-
-<!-- Overlay detrás del chatbot -->
-<div id="chatbot-overlay" style="display: none;"></div>
-
-<!-- Ventana del chatbot -->
-<div id="chatbot-window" style="display: none;">
+<div id="chatbot-overlay" class="chatbot-overlay"></div>
+<div id="chatbot-window" class="chatbot-window" aria-hidden="true">
   <header id="chatbot-header">🌱 EcoBot</header>
   <div class="chat-content" id="chatbot-messages"></div>
   <footer id="chatbot-input">
@@ -105,37 +94,95 @@
   </footer>
 </div>
 
-<!-- Scripts globales -->
+<!-- Contenido -->
+<main class="d-flex flex-column min-vh-100">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{% static 'js/chatbot.js' %}"></script>
 
 <script>
+  // Menú hamburguesa
   function toggleMenu() {
     const menu = document.getElementById("menu-lateral");
     const overlay = document.getElementById("menu-overlay");
     const toggle = document.getElementById("menu-toggle");
-    const body = document.body;
+    const icon = document.getElementById("menu-icon");
 
     const isActive = menu.classList.contains("active");
 
-    menu.classList.toggle("active");
-    overlay.classList.toggle("active");
-    toggle.setAttribute("aria-expanded", !isActive);
-    body.classList.toggle("menu-abierto", !isActive);
+    if (isActive) {
+      cerrarMenu();
+    } else {
+      menu.classList.add("active");
+      overlay.classList.add("active");
+      toggle.setAttribute("aria-expanded", true);
+      menu.setAttribute("aria-hidden", false);
+      overlay.setAttribute("aria-hidden", false);
+      document.body.classList.add("menu-abierto");
+
+      icon.textContent = "✖";
+      icon.classList.remove("closed");
+      icon.classList.add("open");
+    }
   }
 
   function cerrarMenu() {
-    document.getElementById("menu-lateral").classList.remove("active");
-    document.getElementById("menu-overlay").classList.remove("active");
-    document.getElementById("menu-toggle").setAttribute("aria-expanded", false);
+    const menu = document.getElementById("menu-lateral");
+    const overlay = document.getElementById("menu-overlay");
+    const toggle = document.getElementById("menu-toggle");
+    const icon = document.getElementById("menu-icon");
+
+    menu.classList.remove("active");
+    overlay.classList.remove("active");
+    toggle.setAttribute("aria-expanded", false);
+    menu.setAttribute("aria-hidden", true);
+    overlay.setAttribute("aria-hidden", true);
     document.body.classList.remove("menu-abierto");
+
+    icon.textContent = icon.dataset.default || "☰";
+    icon.classList.remove("open");
+    icon.classList.add("closed");
   }
 
+  // 🔹 Cerrar menú al hacer click fuera (overlay)
   document.getElementById("menu-overlay").addEventListener("click", cerrarMenu);
-  document.querySelectorAll("#menu-lateral .btn").forEach(btn => {
-    btn.addEventListener("click", cerrarMenu);
-  });
+
+  // 🔹 Cerrar menú con tecla Escape
+  document.addEventListener("keydown", e => { if (e.key === "Escape") cerrarMenu(); });
+
+  // Configuración desplegable
+  function toggleConfig() {
+    const config = document.getElementById("config-options");
+    config.classList.toggle("active");
+  }
+
+  // Tema oscuro/claro persistente
+  const themeToggle = document.getElementById("theme-toggle");
+  const savedTheme = localStorage.getItem("ecoen-theme") || "light";
+  setTheme(savedTheme);
+
+  function setTheme(mode) {
+    document.documentElement.setAttribute("data-bs-theme", mode);
+    document.body.classList.toggle("dark-mode", mode === "dark");
+    document.body.classList.toggle("light-mode", mode === "light");
+    localStorage.setItem("ecoen-theme", mode);
+    if (themeToggle) {
+      themeToggle.setAttribute("aria-pressed", mode === "dark");
+    }
+  }
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-bs-theme");
+      setTheme(current === "dark" ? "light" : "dark");
+    });
+  }
 </script>
 
+
+{% block extra_js %}{% endblock %}
 </body>
 </html>
