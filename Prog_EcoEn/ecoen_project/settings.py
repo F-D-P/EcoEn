@@ -90,7 +90,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        "DIRS": [BASE_DIR / "ecoen_app" / "templates"],
+        "DIRS": [
+            BASE_DIR / "ecoen_app" / "templates",
+            BASE_DIR / "chatbot" / "templates",   # ✅ agrega esta línea
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,6 +105,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 ROOT_URLCONF = 'ecoen_project.urls'
 WSGI_APPLICATION = 'ecoen_project.wsgi.application'
