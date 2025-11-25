@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "Prog_EcoEn.ecoen_app",
     'django_extensions',
     "chatbot",
+    "widget_tweaks",
+
 ]
 
 # Configuración de sitios y allauth
@@ -81,7 +83,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Templates
 TEMPLATES = [
