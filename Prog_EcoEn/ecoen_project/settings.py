@@ -130,7 +130,9 @@ USE_TZ = True
 
 # Archivos estáticos
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [
+    BASE_DIR / "ecoen_app" / "static",
+]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Whitenoise config
