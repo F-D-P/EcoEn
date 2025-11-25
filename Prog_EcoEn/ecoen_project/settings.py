@@ -9,12 +9,12 @@ from dotenv import load_dotenv
 
 # Cargar variables de entorno
 BASE_DIR = Path(__file__).resolve().parent.parent  # Prog_EcoEn
-ENV_PATH = BASE_DIR.parent / ".env"  # ProgIV-EcoEn/.env
+ENV_PATH = BASE_DIR.parent / ".env"  # EcoEn/.env
 
 load_dotenv(ENV_PATH)
 
 # Configuración de Azure OpenAI
-AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT") 
+AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
 AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_API_VERSION = "2024-08-01-preview"  # versión estable
 
@@ -22,7 +22,6 @@ AZURE_OPENAI_API_VERSION = "2024-08-01-preview"  # versión estable
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = ["1234franco1234.pythonanywhere.com", "localhost", "127.0.0.1"]
-
 
 # Aplicaciones instaladas
 INSTALLED_APPS = [
@@ -42,18 +41,17 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
     # Apps propias
-    "Prog_EcoEn.ecoen_app",
+    "ecoen_app",
     'django_extensions',
     "chatbot",
     "widget_tweaks",
-
 ]
 
 # Configuración de sitios y allauth
 SITE_ID = 1
-LOGIN_REDIRECT_URL = '/'        # adonde redirige después de login
-LOGOUT_REDIRECT_URL = '/'       # adonde redirige después de logout
-ACCOUNT_EMAIL_VERIFICATION = "none"  # puedes poner "mandatory" si quieres verificar emails
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 
 SOCIALACCOUNT_PROVIDERS = {
